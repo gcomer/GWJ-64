@@ -9,6 +9,8 @@ const MAP_SIZE_Y = 800
 
 onready var flashlight_direction = Vector2.ZERO
 onready var mouse_pos = Vector2.ZERO
+onready var FreezeTimer = $FreezeTimer
+onready var FrostBorder = $FrostBorder
 
 signal flashlight_look_at(direction)
 signal cam_reset()
@@ -16,11 +18,17 @@ signal cam_reset()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	screen_size = get_viewport_rect().size
-
+	
+	#remove this later
+	#freezing should be triggered by a signal when you enter a snow zone
+	FreezeTimer.start(10)
 
 func _process(delta):
 	flashlight(delta)
+	move(delta)
+	frost()
 
+func move(delta):
 	var velocity = Vector2.ZERO
 	if Input.is_action_pressed("move_left"):
 		velocity.x -= 1
@@ -65,4 +73,12 @@ func flashlight(delta):
 	elif Input.is_action_just_released("zoom"):
 		emit_signal("cam_reset")
 
-	
+func frost():
+	if FreezeTimer.time_left() > 0:
+		FrostBorder.modulate.a = 1 - FreezeTimer.time_left() / FreezeTimer.total_time()
+	else:
+		FrostBorder.modulate.a = 1
+
+func _on_FreezeTimer_timeout():
+	print("you died")
+	pass
