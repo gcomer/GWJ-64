@@ -27,7 +27,21 @@ animations = [ {
 [node name="player" type="Area2D"]
 script = ExtResource( 2 )
 
+[node name="FreezeTimer" type="Node" parent="."]
+script = ExtResource( 6 )
+
+[node name="FrostBorder" type="TextureRect" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = -600.0
+margin_top = -780.0
+margin_right = 600.0
+margin_bottom = 420.0
+texture = ExtResource( 7 )
+stretch_mode = 1
+
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 0, -180 )
+rotating = true
 current = true
 drag_margin_left = 0.5
 drag_margin_top = 0.5
@@ -59,17 +73,7 @@ margin_top = -198.0
 margin_right = -217.0
 margin_bottom = -198.0
 
-[node name="FreezeTimer" type="Node" parent="."]
-script = ExtResource( 6 )
-
-[node name="FrostBorder" type="TextureRect" parent="."]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = -600.0
-margin_top = -600.0
-margin_right = 600.0
-margin_bottom = 600.0
-texture = ExtResource( 7 )
-stretch_mode = 1
+[node name="TurnTween" type="Tween" parent="."]
 
 [connection signal="cam_reset" from="." to="Camera2D" method="_on_player_cam_reset"]
 [connection signal="flashlight_look_at" from="." to="Camera2D" method="_on_player_flashlight_look_at"]

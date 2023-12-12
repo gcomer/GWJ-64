@@ -5,12 +5,17 @@ export var speed = 400
 var screen_size
 const MAP_SIZE_X = 800
 const MAP_SIZE_Y = 800
+const SHIFT_TRANS = Tween.TRANS_SINE
+const SHIFT_EASE = Tween.EASE_OUT
+const SHIFT_DURATION = 1.0
 
-
+onready var tween = $TurnTween
 onready var flashlight_direction = Vector2.ZERO
 onready var mouse_pos = Vector2.ZERO
 onready var FreezeTimer = $FreezeTimer
 onready var FrostBorder = $FrostBorder
+onready var target_angle = 0.0
+
 
 signal flashlight_look_at(direction)
 signal cam_reset()
@@ -26,25 +31,8 @@ func _ready():
 func _process(delta):
 	flashlight(delta)
 	move(delta)
+	turn(delta)
 	frost()
-
-func move(delta):
-	var velocity = Vector2.ZERO
-	if Input.is_action_pressed("move_left"):
-		velocity.x -= 1
-	if Input.is_action_pressed("move_right"):
-		velocity.x += 1
-	if Input.is_action_pressed("move_up"):
-		velocity.y -= 1
-	if Input.is_action_pressed("move_down"):
-		velocity.y += 1
-	
-	if velocity.length() > 0:
-		velocity = velocity.normalized() * speed
-	
-	position += velocity * delta
-	position.x = clamp(position.x, -MAP_SIZE_X/2, MAP_SIZE_X/2)
-	position.y = clamp(position.y, -MAP_SIZE_Y/2, MAP_SIZE_Y/2)
 
 func flashlight(delta):
 	var new_mouse_pos = get_global_mouse_position()
@@ -72,6 +60,38 @@ func flashlight(delta):
 		emit_signal("flashlight_look_at", flashlight_direction)
 	elif Input.is_action_just_released("zoom"):
 		emit_signal("cam_reset")
+
+func move(delta):
+	var velocity = Vector2.ZERO
+	if Input.is_action_pressed("move_left"):
+		velocity.x -= 1
+	if Input.is_action_pressed("move_right"):
+		velocity.x += 1
+	if Input.is_action_pressed("move_up"):
+		velocity.y -= 1
+	if Input.is_action_pressed("move_down"):
+		velocity.y += 1
+	
+	if velocity.length() > 0:
+		velocity = velocity.normalized() * speed
+		velocity = velocity.rotated(rotation)
+	
+	position += velocity * delta
+	position.x = clamp(position.x, -MAP_SIZE_X/2, MAP_SIZE_X/2)
+	position.y = clamp(position.y, -MAP_SIZE_Y/2, MAP_SIZE_Y/2)
+
+func turn(delta):
+	if Input.is_action_just_pressed("turn_left"):
+		target_angle -= 45.0
+		print("new target:", target_angle)
+		tween.interpolate_property(self, "rotation_degrees", rotation_degrees, target_angle, SHIFT_DURATION, SHIFT_TRANS, SHIFT_EASE)
+		tween.start()
+	if Input.is_action_just_pressed("turn_right"):
+		target_angle += 45.0
+		print("new target:", target_angle)
+		tween.interpolate_property(self, "rotation_degrees", rotation_degrees, target_angle, SHIFT_DURATION, SHIFT_TRANS, SHIFT_EASE)
+		tween.start()
+	
 
 func frost():
 	if FreezeTimer.time_left() > 0:
