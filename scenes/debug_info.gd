@@ -13,4 +13,5 @@ func _ready():
 
 func _process(delta):
 	var timer = "%d:%02d" % [floor($"../FreezeTimer".time_left() / 60), int($"../FreezeTimer".time_left()) % 60]
-	$Label.text = "DEBUG INFO\nTIMER 1 : " + timer
+	var fuel = "%d" % [Globals.fuel_collected]
+	$Label.text = "DEBUG INFO\nTIMER 1 : " + timer + "\nFUEL COLLECTED : " + fuel

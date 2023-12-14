@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://fuel.gd" type="Script" id=1]
+[ext_resource path="res://textures/button_prompts/pickup_prompt.png" type="Texture" id=2]
+[ext_resource path="res://world_object_holder.gd" type="Script" id=3]
+[ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://textures/flashlight_beam.png" type="Texture" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 150, 150 )
+
+[node name="fuel" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="Area2D" type="Area2D" parent="."]
+script = ExtResource( 1 )
+base_texture = ExtResource( 4 )
+highlighted_texture = ExtResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="Area2D"]
+texture = ExtResource( 4 )
+
+[node name="Control" type="Control" parent="Area2D"]
+
+[node name="PickupHint" type="TextureRect" parent="Area2D/Control"]
+visible = false
+margin_left = -87.5
+margin_top = -75.0
+margin_right = 87.5
+margin_bottom = -50.0
+texture = ExtResource( 2 )
+expand = true
+
+[node name="TurnTween" type="Tween" parent="."]
+
+[connection signal="area_entered" from="Area2D" to="Area2D" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="Area2D" to="Area2D" method="_on_Area2D_area_exited"]
