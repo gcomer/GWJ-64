@@ -3,8 +3,8 @@ extends Area2D
 export var speed = 400 
 
 var screen_size
-const MAP_SIZE_X = 800
-const MAP_SIZE_Y = 800
+const MAP_SIZE_X = 8000000
+const MAP_SIZE_Y = 8000000
 
 
 onready var flashlight_direction = Vector2.ZERO
@@ -21,12 +21,24 @@ func _ready():
 	
 	#remove this later
 	#freezing should be triggered by a signal when you enter a snow zone
-	FreezeTimer.start(10)
+	FreezeTimer.start(100000)
+	#set up tilemap
+#	for x in Worldgenerator.width:
+#		for y in Worldgenerator.height:
+#			get_node("Control/TileMap").set_cell(x,y, Worldgenerator.matrix[x][y])
 
 func _process(delta):
 	flashlight(delta)
 	move(delta)
+	check_map()
 	frost()
+
+func check_map():
+	if Input.is_action_pressed("ui_end"):
+		get_node("Control").show()
+	else:
+		get_node("Control").hide()
+		
 
 func move(delta):
 	var velocity = Vector2.ZERO
