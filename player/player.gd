@@ -1,6 +1,7 @@
 extends Area2D
 
 export var speed = 400 
+export var time_til_frozen = 60
 
 var screen_size
 const MAP_SIZE_X = 800
@@ -19,6 +20,7 @@ onready var target_angle = 0.0
 
 signal flashlight_look_at(direction)
 signal cam_reset()
+signal turn(angle)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -26,7 +28,7 @@ func _ready():
 	
 	#remove this later
 	#freezing should be triggered by a signal when you enter a snow zone
-	FreezeTimer.start(10)
+	FreezeTimer.start(time_til_frozen)
 
 func _process(delta):
 	flashlight(delta)
@@ -84,11 +86,13 @@ func turn(delta):
 	if Input.is_action_just_pressed("turn_left"):
 		target_angle -= 45.0
 		print("new target:", target_angle)
+		emit_signal("turn", target_angle)
 		tween.interpolate_property(self, "rotation_degrees", rotation_degrees, target_angle, SHIFT_DURATION, SHIFT_TRANS, SHIFT_EASE)
 		tween.start()
 	if Input.is_action_just_pressed("turn_right"):
 		target_angle += 45.0
 		print("new target:", target_angle)
+		emit_signal("turn", target_angle)
 		tween.interpolate_property(self, "rotation_degrees", rotation_degrees, target_angle, SHIFT_DURATION, SHIFT_TRANS, SHIFT_EASE)
 		tween.start()
 	

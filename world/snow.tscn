@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://world/snow.gd" type="Script" id=1]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0.240223, 0.581006, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 0.549337, 0.77526, 0.785645, 1, 1, 1, 1, 1 )
 
 [node name="Snow" type="CPUParticles2D"]
 position = Vector2( 416, 134 )
@@ -10,10 +14,11 @@ randomness = 1.0
 emission_shape = 1
 emission_sphere_radius = 800.0
 direction = Vector2( 0, 1 )
-gravity = Vector2( 30, 30 )
+gravity = Vector2( 25, 25 )
 initial_velocity = 50.0
-initial_velocity_random = 0.53
+initial_velocity_random = 0.5
 scale_amount = 3.0
 scale_amount_random = 1.0
+color_ramp = SubResource( 1 )
 script = ExtResource( 1 )
 wind_direction = "NE"
