@@ -22,7 +22,6 @@ func generate_map():
 		for y in height:
 			matrix[x].append(floor((abs(openSimplexNoise.get_noise_2d(x,y)))*5))
 			tilemap.set_cell(x,y, matrix[x][y])
-			
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _input(event: InputEvent):

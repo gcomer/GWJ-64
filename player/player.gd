@@ -23,9 +23,9 @@ func _ready():
 	#freezing should be triggered by a signal when you enter a snow zone
 	FreezeTimer.start(100000)
 	#set up tilemap
-#	for x in Worldgenerator.width:
-#		for y in Worldgenerator.height:
-#			get_node("Control/TileMap").set_cell(x,y, Worldgenerator.matrix[x][y])
+	for x in Worldgenerator.width:
+		for y in Worldgenerator.height:
+			get_node("Control/TileMap").set_cell(x,y, Worldgenerator.matrix[x][y])
 
 func _process(delta):
 	flashlight(delta)
